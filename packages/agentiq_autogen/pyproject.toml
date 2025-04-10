@@ -1,0 +1,32 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools >= 64", "setuptools-scm>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["aiq.*"]
+
+[tool.setuptools_scm]
+root = "../.."
+
+[project]
+name = "agentiq-autogen"
+dynamic = ["version"]
+dependencies = [
+  "agentiq",
+  "pyautogen~=0.2.0",
+]
+requires-python = ">=3.12"
+description = "Subpackage for AutoGen integration in AgentIQ"
+readme = "src/aiq/meta/pypi.md"
+keywords = ["ai", "agents", "autogen"]
+classifiers = ["Programming Language :: Python"]
+
+[tool.uv]
+config-settings = { editable_mode = "compat" }
+
+[tool.uv.sources]
+agentiq = { workspace = true }
+
+[project.entry-points.'aiq.components']
+aiq_autogen = "aiq.plugins.autogen.register" 

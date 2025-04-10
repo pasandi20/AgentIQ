@@ -1,0 +1,36 @@
+functions:
+   # Add a tool to search wikipedia
+   wikipedia_search:
+      _type: wiki_search
+      max_results: 2
+
+llms:
+   # Tell AgentIQ which LLM to use for the agent
+   nim_llm:
+      _type: nim
+      model_name: meta/llama-3.1-70b-instruct
+      temperature: 0.0
+
+workflow:
+   # Use AutoGen's group chat
+   _type: autogen_group_chat
+   # Give it access to our wikipedia search tool
+   tool_names: [wikipedia_search]
+   # Tell it which LLM to use
+   llm_name: nim_llm
+   # Configure a single agent
+   agents:
+      - name: "assistant"
+        role: "Helpful assistant that can search for information"
+        kwargs:
+          llm_config:
+            config_list:
+              - model: meta/llama-3.1-70b-instruct
+                base_url: "https://api.nvcf.nvidia.com/v2/nvcf/chat/completions"
+                api_key: ${NVIDIA_API_KEY}
+   # Make it verbose
+   verbose: true
+   # Retry parsing errors because LLMs are non-deterministic
+   retry_parsing_errors: true
+   # Retry up to 3 times
+   max_retries: 3 
